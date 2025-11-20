@@ -21,6 +21,10 @@ This tool is designed for flight simulation pilots who want to add structure and
 
 This project is currently in development.
 
+## Architecture & Monorepo Plan
+
+The high-level component plan—including the proposed monorepo layout, technology choices, CI/CD flow, and Kubernetes deployment strategy—is documented in `docs/architecture.md`. Start there when evaluating how the frontend, backend, infrastructure, and operational tooling fit together. Detailed local setup instructions are tracked in `docs/onboarding.md`, and automation/AI agent guidelines live in `.github/copilot-instructions.md`.
+
 ## License
 
 TBD

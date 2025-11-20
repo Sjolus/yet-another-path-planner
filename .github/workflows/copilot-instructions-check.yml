@@ -1,0 +1,30 @@
+name: Copilot Instructions Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+jobs:
+  ensure-copilot-instructions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Ensure copilot instructions file exists
+        run: |
+          if [ ! -s .github/copilot-instructions.md ]; then
+            echo "::error ::Missing or empty .github/copilot-instructions.md"
+            exit 1
+          fi
+
+      - name: Verify references in key docs
+        run: |
+          set -euo pipefail
+          files=(README.md .github/pull_request_template.md .github/ISSUE_TEMPLATE/bug_report.md .github/ISSUE_TEMPLATE/feature_request.md)
+          for f in "${files[@]}"; do
+            if ! grep -q ".github/copilot-instructions.md" "$f"; then
+              echo "::error file=$f::Missing reference to .github/copilot-instructions.md"
+              exit 1
+            fi
+          done
