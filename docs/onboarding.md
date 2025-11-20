@@ -89,11 +89,32 @@ pre-commit install
 - **Telemetry not visible**: confirm the Grafana Agent has connectivity, the OTLP endpoint/token are correct, and ports 4317/4318 are reachable from containers.
 - **Kubernetes sync issues**: `kubectl describe` the Argo CD Application or Flux Kustomization and check `kubectl get events -A` for RBAC or image-pull failures.
 
-## 8. Helpful References
+## 8. Docker Images & CI/CD
+
+Docker images for all components (frontend, backend, api-gateway) are automatically built and published to GitHub Container Registry through CI/CD:
+
+- **Workflow**: `.github/workflows/docker-build.yml` builds multi-arch images (linux/amd64, linux/arm64)
+- **Registry**: Images are published to `ghcr.io/sjolus/yet-another-path-planner/{component}`
+- **Tagging Strategy**:
+  - `latest` — most recent build from main branch
+  - `main-{sha}` — specific commit on main
+  - `v{version}` — semantic version tags
+  - `pr-{number}` — PR builds (not pushed to registry)
+- **Local Testing**: Each component has a Dockerfile for local builds and docker-compose.yml orchestrates the full stack
+
+To pull and run a published image:
+```bash
+docker pull ghcr.io/sjolus/yet-another-path-planner/backend:latest
+docker pull ghcr.io/sjolus/yet-another-path-planner/frontend:latest
+docker pull ghcr.io/sjolus/yet-another-path-planner/api-gateway:latest
+```
+
+## 9. Helpful References
 
 - `docs/architecture.md` — full component plan.
 - `docs/adrs/` — rationale behind major decisions (add entries as the system evolves).
 - `infrastructure/helm/` — manifests for the cluster.
 - `ops/runbooks/` — operational guides (to be expanded alongside feature work).
+- `.github/workflows/` — CI/CD workflows for testing, linting, and Docker builds.
 
 Feel free to open a discussion or GitHub issue if any onboarding step is unclear or needs automation.
