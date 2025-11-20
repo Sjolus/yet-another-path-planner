@@ -19,7 +19,28 @@ This tool is designed for flight simulation pilots who want to add structure and
 
 ## Status
 
-This project is currently in development.
+This project is currently in development. The project skeleton is complete with a fully functional monorepo setup.
+
+## Quick Start
+
+```bash
+# Install dependencies
+pnpm install
+
+# Run development servers
+pnpm dev
+
+# Build all packages
+pnpm build
+
+# Run tests
+pnpm test
+
+# Lint code
+pnpm lint
+```
+
+For detailed setup instructions, see [`docs/onboarding.md`](docs/onboarding.md).
 
 ## Architecture & Monorepo Plan
 
