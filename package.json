@@ -1,0 +1,23 @@
+{
+  "name": "yet-another-path-planner",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A tool for finding, creating, and tracking flight tours for flight simulation careers",
+  "license": "TBD",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "clean": "turbo run clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "turbo": "^2.3.3",
+    "prettier": "^3.4.2"
+  }
+}
