@@ -99,7 +99,7 @@ Docker images for all components (frontend, backend, api-gateway) are automatica
   - `latest` — most recent build from main branch
   - `main-{sha}` — specific commit on main
   - `v{version}` — semantic version tags
-  - `pr-{number}` — PR builds (not pushed to registry)
+  - `pr-{number}` — PR builds (built but not pushed to registry)
 - **Local Testing**: Each component has a Dockerfile for local builds and docker-compose.yml orchestrates the full stack
 
 To pull and run a published image:
