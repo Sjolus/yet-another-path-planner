@@ -34,7 +34,6 @@ ENV NODE_ENV=production
 COPY --from=prod-dependencies /app/node_modules ./node_modules
 COPY --from=prod-dependencies /app/frontend/node_modules ./frontend/node_modules
 COPY --from=build /app/frontend/.next ./.next
-COPY --from=build /app/frontend/public ./public
 COPY frontend/package.json ./package.json
 
 EXPOSE 3000
