@@ -103,6 +103,7 @@ Docker images for all components (frontend, backend, api-gateway) are automatica
 - **Local Testing**: Each component has a Dockerfile for local builds and docker-compose.yml orchestrates the full stack
 
 To pull and run a published image:
+
 ```bash
 docker pull ghcr.io/sjolus/yet-another-path-planner/backend:latest
 docker pull ghcr.io/sjolus/yet-another-path-planner/frontend:latest

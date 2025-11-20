@@ -16,12 +16,18 @@ COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
 RUN pnpm build
 
+FROM base AS prod-dependencies
+
+WORKDIR /app
+COPY package.json pnpm-lock.yaml* ./
+RUN pnpm install --prod --frozen-lockfile
+
 FROM base AS production
 
 WORKDIR /app
 ENV NODE_ENV=production
 
-COPY --from=dependencies /app/node_modules ./node_modules
+COPY --from=prod-dependencies /app/node_modules ./node_modules
 COPY --from=build /app/.next ./.next
 COPY --from=build /app/public ./public
 COPY package.json ./
