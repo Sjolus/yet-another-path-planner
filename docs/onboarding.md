@@ -97,8 +97,9 @@ Docker images for all components (frontend, backend, api-gateway) are automatica
 - **Registry**: Images are published to `ghcr.io/sjolus/yet-another-path-planner/{component}`
 - **Tagging Strategy**:
   - `latest` — most recent build from main branch
-  - `main-{sha}` — specific commit on main
-  - `v{version}` — semantic version tags
+  - `main` — branch name for main branch builds
+  - `sha-{commit}` — specific commit SHA (e.g., `sha-764682f`)
+  - `v{version}` — semantic version tags (e.g., `v1.2.3`, `v1.2`, `v1`)
   - `pr-{number}` — PR builds (built but not pushed to registry)
 - **Local Testing**: Each component has a Dockerfile for local builds and docker-compose.yml orchestrates the full stack
 
