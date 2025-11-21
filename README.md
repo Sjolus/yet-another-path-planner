@@ -2,6 +2,15 @@
 
 A tool for finding, creating, and tracking flight tours for flight simulation careers.
 
+[![Commit Activity](https://img.shields.io/github/commit-activity/y/Sjolus/yet-another-path-planner?label=commit%20activity)](https://github.com/Sjolus/yet-another-path-planner/commits/main)
+[![CI / Tests](https://github.com/Sjolus/yet-another-path-planner/actions/workflows/ci.yml/badge.svg?label=CI%20%2F%20Tests)](https://github.com/Sjolus/yet-another-path-planner/actions/workflows/ci.yml)
+[![GHCR Builds](https://github.com/Sjolus/yet-another-path-planner/actions/workflows/docker-build.yml/badge.svg?label=GHCR%20builds)](https://github.com/Sjolus/yet-another-path-planner/actions/workflows/docker-build.yml)
+[![Coverage](https://img.shields.io/badge/coverage-coming%20soon-lightgrey)](docs/architecture.md)
+[![Version](https://img.shields.io/github/package-json/v/Sjolus/yet-another-path-planner?filename=package.json&label=version)](package.json)
+[![Dependencies](https://img.shields.io/badge/dependencies-pnpm%20workspace-ffb703?logo=pnpm&logoColor=white)](pnpm-workspace.yaml)
+[![Container Publish](https://img.shields.io/badge/GHCR-publish%20enabled-003f8c?logo=docker&logoColor=white)](https://github.com/users/Sjolus/packages?repo_name=yet-another-path-planner)
+[![License](https://img.shields.io/badge/license-CC--BY--NC--ND%204.0-orange)](LICENSE)
+
 ## Overview
 
 Yet Another Path Planner helps flight simulation enthusiasts plan and manage their virtual flying careers by creating organized flight tours and tracking progress through them.
@@ -20,6 +29,8 @@ This tool is designed for flight simulation pilots who want to add structure and
 ## Status
 
 This project is currently in development. The project skeleton is complete with a fully functional monorepo setup.
+
+Automated coverage reporting is planned; the badge above will switch from "coming soon" once the Codecov workflow ships.
 
 ## Quick Start
 
@@ -48,4 +59,4 @@ The high-level component plan—including the proposed monorepo layout, technolo
 
 ## License
 
-TBD
+This project is licensed under the [Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International](LICENSE) license.
