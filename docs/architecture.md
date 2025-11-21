@@ -33,6 +33,12 @@ This document describes the proposed monorepo layout and the end-to-end platform
 ## CI/CD Pipeline
 
 1. **GitHub Actions** run lint/test/build matrices, build multi-arch images with Buildx, and push to GHCR.
+   - Separate workflows for code quality (`.github/workflows/ci.yml`) and Docker image builds (`.github/workflows/docker-build.yml`)
+   - Docker images built for `frontend`, `backend`, and `api-gateway` components
+   - Multi-architecture support: linux/amd64 and linux/arm64
+   - Images tagged with: branch name, PR number, semantic version, commit SHA, and `latest` for main branch
+   - Automatic push to GitHub Container Registry (ghcr.io) on push to main or version tags
+   - PR builds are tested but not pushed to registry
 2. **Security**: SBOM + image signing (Cosign), vulnerability scanning (Trivy/Grype), dependency review, and secret scanning.
 3. **Promotion**: Upon success, manifests in `infrastructure/helm/` are updated or tagged, then Argo CD or Flux pulls from `main` and syncs the cluster. Preview environments can be created automatically with a lightweight namespace per PR.
 
