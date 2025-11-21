@@ -3,8 +3,8 @@
 A tool for finding, creating, and tracking flight tours for flight simulation careers.
 
 [![Commit Activity](https://img.shields.io/github/commit-activity/y/Sjolus/yet-another-path-planner?label=commit%20activity)](https://github.com/Sjolus/yet-another-path-planner/commits/main)
-[![CI / Tests](https://github.com/Sjolus/yet-another-path-planner/actions/workflows/ci.yml/badge.svg?label=CI%20%2F%20Tests)](https://github.com/Sjolus/yet-another-path-planner/actions/workflows/ci.yml)
-[![GHCR Builds](https://github.com/Sjolus/yet-another-path-planner/actions/workflows/docker-build.yml/badge.svg?label=GHCR%20builds)](https://github.com/Sjolus/yet-another-path-planner/actions/workflows/docker-build.yml)
+[![CI](https://github.com/Sjolus/yet-another-path-planner/actions/workflows/ci.yml/badge.svg)](https://github.com/Sjolus/yet-another-path-planner/actions/workflows/ci.yml)
+[![Build and Push Docker Images](https://github.com/Sjolus/yet-another-path-planner/actions/workflows/docker-build.yml/badge.svg)](https://github.com/Sjolus/yet-another-path-planner/actions/workflows/docker-build.yml)
 [![Coverage](https://img.shields.io/badge/coverage-coming%20soon-lightgrey)](docs/architecture.md)
 [![Version](https://img.shields.io/github/package-json/v/Sjolus/yet-another-path-planner?filename=package.json&label=version)](package.json)
 [![Dependencies](https://img.shields.io/badge/dependencies-pnpm%20workspace-ffb703?logo=pnpm&logoColor=white)](pnpm-workspace.yaml)
