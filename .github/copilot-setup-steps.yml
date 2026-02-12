@@ -1,0 +1,31 @@
+# GitHub Copilot coding agent setup steps
+# This file configures the ephemeral development environment for Copilot coding agent
+# to pre-install dependencies and tools before it starts working on tasks.
+# See: https://docs.github.com/en/copilot/customizing-copilot/customizing-the-development-environment-for-copilot-coding-agent
+
+name: Setup Yet Another Path Planner Development Environment
+
+steps:
+  # Install Node.js and pnpm
+  - name: Setup Node.js
+    uses: actions/setup-node@v4
+    with:
+      node-version: '20'
+      
+  - name: Install pnpm
+    uses: pnpm/action-setup@v4
+    with:
+      version: 9
+      
+  # Install dependencies for all packages in the monorepo
+  - name: Install dependencies
+    run: pnpm install --frozen-lockfile
+    
+  # Build all packages (required before tests per turbo.json)
+  - name: Build packages
+    run: pnpm build
+    
+  # Optional: Setup Docker for integration tests
+  # Uncomment if Copilot needs to run Docker-based tests
+  # - name: Start Docker services
+  #   run: docker compose up -d db redis

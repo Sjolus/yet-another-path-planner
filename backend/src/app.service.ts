@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { HealthCheckResponse } from './health-check-response.interface';
+import { HealthCheckResponse } from './health-check-response.dto';
 
  
 const { version } = require('../package.json');

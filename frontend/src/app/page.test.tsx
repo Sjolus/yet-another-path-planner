@@ -9,10 +9,10 @@ describe('Home', () => {
     render(<Home />)
 
     expect(screen.getByRole('heading', { level: 1, name: /yet another path planner/i }))
-      .toBeTruthy()
+      .toBeInTheDocument()
 
-    expect(screen.getByRole('heading', { level: 2, name: /find tours/i })).toBeTruthy()
-    expect(screen.getByRole('heading', { level: 2, name: /create tours/i })).toBeTruthy()
-    expect(screen.getByRole('heading', { level: 2, name: /track progress/i })).toBeTruthy()
+    expect(screen.getByRole('heading', { level: 2, name: /find tours/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 2, name: /create tours/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 2, name: /track progress/i })).toBeInTheDocument()
   })
 })
