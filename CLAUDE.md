@@ -82,6 +82,9 @@ docker compose up --build       # Full local stack (postgres, redis, frontend, b
 - `docs/architecture.md` -- system design, deployment topology, tech choices
 - `docs/onboarding.md` -- local setup, environment config, troubleshooting
 - `.github/copilot-instructions.md` -- AI agent collaboration rules
+- `.github/instructions/*.instructions.md` -- path-specific instructions for components
+- `.github/copilot-setup-steps.yml` -- environment setup for Copilot coding agent
+- `AGENTS.md` -- custom agent profiles documentation
 - `.github/pull_request_template.md` -- PR checklist
 
 ## CI/CD
