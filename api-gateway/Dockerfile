@@ -16,7 +16,7 @@ FROM base AS build
 WORKDIR /app
 COPY --from=dependencies /app ./
 COPY api-gateway ./api-gateway
-RUN pnpm --filter @yapp/api-gateway build
+RUN pnpm --filter @yapp/api-gateway... build
 
 FROM base AS prod-dependencies
 

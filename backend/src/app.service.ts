@@ -1,12 +1,16 @@
 import { Injectable } from '@nestjs/common';
+import { HealthCheckResponse } from './health-check-response.dto';
+
+ 
+const { version } = require('../package.json');
 
 @Injectable()
 export class AppService {
-  getHealth(): object {
+  getHealth(): HealthCheckResponse {
     return {
       status: 'ok',
       service: 'yet-another-path-planner-backend',
-      version: '0.1.0',
+      version,
       timestamp: new Date().toISOString(),
     };
   }

@@ -31,8 +31,8 @@ services:
 
   backend:
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: backend/Dockerfile
     container_name: yapp-backend
     environment:
       NODE_ENV: development
@@ -47,24 +47,42 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ./backend:/app
-      - /app/node_modules
+      - ./backend:/app/backend
+      - /app/backend/node_modules
 
-  frontend:
+  api-gateway:
     build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: yapp-frontend
+      context: .
+      dockerfile: api-gateway/Dockerfile
+    container_name: yapp-api-gateway
     environment:
-      NEXT_PUBLIC_API_URL: http://localhost:3001
+      NODE_ENV: development
+      PORT: 3002
+      BACKEND_URL: http://backend:3001
+      CORS_ORIGIN: http://localhost:3000
     ports:
-      - '3000:3000'
+      - '3002:3002'
     depends_on:
       - backend
     volumes:
-      - ./frontend:/app
-      - /app/node_modules
-      - /app/.next
+      - ./api-gateway:/app/api-gateway
+      - /app/api-gateway/node_modules
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: yapp-frontend
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3002
+    ports:
+      - '3000:3000'
+    depends_on:
+      - api-gateway
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules
+      - /app/frontend/.next
 
 volumes:
   postgres_data:
