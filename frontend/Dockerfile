@@ -16,7 +16,7 @@ FROM base AS build
 WORKDIR /app
 COPY --from=dependencies /app ./
 COPY frontend ./frontend
-RUN pnpm --filter @yapp/frontend build
+RUN pnpm --filter @yapp/frontend... build
 
 FROM base AS prod-dependencies
 
