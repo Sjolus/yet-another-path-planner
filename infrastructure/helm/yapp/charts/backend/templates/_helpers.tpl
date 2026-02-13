@@ -56,3 +56,15 @@ Image reference
 {{- $tag := .Values.image.tag | default .Values.global.yapp.imageTag | default "latest" -}}
 {{- printf "%s/backend:%s" $registry $tag }}
 {{- end }}
+
+{{/*
+Secret name for shared secrets.
+Uses global.yapp.secretName if set, otherwise defaults to <release-name>-secrets.
+*/}}
+{{- define "backend.secretName" -}}
+{{- if .Values.global.yapp.secretName }}
+{{- .Values.global.yapp.secretName }}
+{{- else }}
+{{- printf "%s-secrets" .Release.Name }}
+{{- end }}
+{{- end }}

@@ -59,7 +59,13 @@ Usage: {{ include "yapp.image" (dict "component" "frontend" "global" .Values.glo
 
 {{/*
 Secret name for shared secrets.
+Uses global.yapp.secretName if set, otherwise defaults to <release-name>-secrets.
+This ensures subcharts and the umbrella chart reference the same Secret.
 */}}
 {{- define "yapp.secretName" -}}
-{{- printf "%s-secrets" (include "yapp.fullname" .) }}
+{{- if .Values.global.yapp.secretName }}
+{{- .Values.global.yapp.secretName }}
+{{- else }}
+{{- printf "%s-secrets" .Release.Name }}
+{{- end }}
 {{- end }}
