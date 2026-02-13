@@ -65,6 +65,7 @@ jobs:
           cache-to: type=gha,mode=max
           provenance: false
         
+      # Retry once on failure to handle transient GHCR network/infrastructure issues (502 errors)
       - name: Retry build and push on failure
         if: failure()
         uses: docker/build-push-action@v6
@@ -130,6 +131,7 @@ jobs:
           cache-to: type=gha,mode=max
           provenance: false
         
+      # Retry once on failure to handle transient GHCR network/infrastructure issues (502 errors)
       - name: Retry build and push on failure
         if: failure()
         uses: docker/build-push-action@v6
@@ -195,6 +197,7 @@ jobs:
           cache-to: type=gha,mode=max
           provenance: false
         
+      # Retry once on failure to handle transient GHCR network/infrastructure issues (502 errors)
       - name: Retry build and push on failure
         if: failure()
         uses: docker/build-push-action@v6
