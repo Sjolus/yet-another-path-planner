@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 {{- $fullName := include "common.names.fullname" . }}
 {{- $nodesCount := .Values.replica.replicaCount | int }}
 {{- $loadBalancerIPs := coalesce .Values.sentinel.externalAccess.service.loadBalancerIPs .Values.sentinel.externalAccess.service.loadBalancerIP }}
-{{- $loadBalancerIPAnnotation := coalesce .Values.sentinel.externalAccess.service.loadBalancerIPAnnotation .Values.sentinel.externalAccess.service.loadBalancerIPAnnotaion | default "" }}
+{{- $loadBalancerIPAnnotation := .Values.sentinel.externalAccess.service.loadBalancerIPAnnotation | default "" }}
 {{- $root := . }}
 
 {{- range $i, $e := until $nodesCount }}

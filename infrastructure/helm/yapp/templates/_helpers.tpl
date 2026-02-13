@@ -54,7 +54,7 @@ Construct a full image reference for a given component.
 Usage: {{ include "yapp.image" (dict "component" "frontend" "global" .Values.global) }}
 */}}
 {{- define "yapp.image" -}}
-{{- printf "%s/%s:%s" .global.imageRegistry .component (default "latest" .global.imageTag) }}
+{{- printf "%s/%s:%s" .global.yapp.imageRegistry .component (default "latest" .global.yapp.imageTag) }}
 {{- end }}
 
 {{/*
