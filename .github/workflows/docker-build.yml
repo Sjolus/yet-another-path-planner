@@ -68,7 +68,7 @@ jobs:
         
       # Retry once on failure to handle transient GHCR network/infrastructure issues (502 errors)
       - name: Retry build and push on failure
-        if: failure() && steps.build.outcome == 'failure'
+        if: steps.build.outcome == 'failure'
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -135,7 +135,7 @@ jobs:
         
       # Retry once on failure to handle transient GHCR network/infrastructure issues (502 errors)
       - name: Retry build and push on failure
-        if: failure() && steps.build.outcome == 'failure'
+        if: steps.build.outcome == 'failure'
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -202,7 +202,7 @@ jobs:
         
       # Retry once on failure to handle transient GHCR network/infrastructure issues (502 errors)
       - name: Retry build and push on failure
-        if: failure() && steps.build.outcome == 'failure'
+        if: steps.build.outcome == 'failure'
         uses: docker/build-push-action@v6
         with:
           context: .
