@@ -1,0 +1,71 @@
+# Development overrides (local kind/minikube cluster)
+#
+# Usage:
+#   helm install yapp ./infrastructure/helm/yapp \
+#     -f ./infrastructure/helm/yapp/values-dev.yaml \
+#     -n yapp-dev --create-namespace
+
+global:
+  yapp:
+    imageTag: latest
+    imagePullPolicy: Always
+
+frontend:
+  replicaCount: 1
+  env:
+    NEXT_PUBLIC_API_URL: "http://yapp.local/api"
+  hpa:
+    enabled: false
+  pdb:
+    enabled: false
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 250m
+      memory: 128Mi
+
+backend:
+  replicaCount: 1
+  env:
+    NODE_ENV: development
+    FRONTEND_URL: "http://yapp.local"
+  hpa:
+    enabled: false
+  pdb:
+    enabled: false
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi
+
+api-gateway:
+  replicaCount: 1
+  env:
+    CORS_ORIGIN: "http://yapp.local"
+  hpa:
+    enabled: false
+  pdb:
+    enabled: false
+
+ingress:
+  enabled: true
+  className: traefik
+  hosts:
+    - host: yapp.local
+
+postgresql:
+  enabled: true
+  auth:
+    database: yapp_dev
+  primary:
+    persistence:
+      size: 1Gi
+
+redis:
+  enabled: true
+  architecture: standalone

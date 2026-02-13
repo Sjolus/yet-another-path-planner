@@ -1,0 +1,48 @@
+Thank you for installing {{ .Chart.Name }}!
+
+Your release is named: {{ .Release.Name }}
+Namespace: {{ .Release.Namespace }}
+
+== Services Deployed ==
+
+  Frontend:    {{ .Release.Name }}-frontend    (port {{ .Values.frontend.service.port | default 3000 }})
+  API Gateway: {{ .Release.Name }}-api-gateway (port {{ (index .Values "api-gateway").service.port | default 3002 }})
+  Backend:     {{ .Release.Name }}-backend     (port {{ .Values.backend.service.port | default 3001 }})
+
+== Quick Access (port-forward) ==
+
+  # Frontend
+  kubectl port-forward svc/{{ .Release.Name }}-frontend {{ .Values.frontend.service.port | default 3000 }}:{{ .Values.frontend.service.port | default 3000 }} -n {{ .Release.Namespace }}
+
+  # API Gateway
+  kubectl port-forward svc/{{ .Release.Name }}-api-gateway {{ (index .Values "api-gateway").service.port | default 3002 }}:{{ (index .Values "api-gateway").service.port | default 3002 }} -n {{ .Release.Namespace }}
+
+  # Backend
+  kubectl port-forward svc/{{ .Release.Name }}-backend {{ .Values.backend.service.port | default 3001 }}:{{ .Values.backend.service.port | default 3001 }} -n {{ .Release.Namespace }}
+
+{{- if .Values.ingress.enabled }}
+
+== Ingress ==
+
+{{- range .Values.ingress.hosts }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ .host }}
+{{- end }}
+{{- end }}
+
+== Health Checks ==
+
+  Backend:     GET /        -> {"status":"ok",...}
+  API Gateway: GET /health  -> {"status":"ok",...}
+  Frontend:    GET /        -> HTTP 200
+
+== Important Notes ==
+
+  1. NEXT_PUBLIC_* environment variables are baked into the frontend Docker image
+     at build time. Changing them via ConfigMap only affects server-side rendering.
+     To change client-side values, rebuild the frontend image.
+
+  2. For production, replace the Kubernetes Secret with External Secrets Operator
+     or SealedSecrets resources pointing to your secrets manager.
+
+  3. Default secrets (JWT, database password) are NOT production-safe.
+     Always override via --set or a separate values file.

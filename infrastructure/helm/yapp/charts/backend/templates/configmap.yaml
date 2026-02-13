@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "backend.fullname" . }}
+  labels:
+    {{- include "backend.labels" . | nindent 4 }}
+data:
+  NODE_ENV: {{ .Values.env.NODE_ENV | quote }}
+  PORT: {{ .Values.env.PORT | quote }}
+  JWT_EXPIRATION: {{ .Values.env.JWT_EXPIRATION | quote }}
+  JWT_REFRESH_EXPIRATION: {{ .Values.env.JWT_REFRESH_EXPIRATION | quote }}
+  OTEL_SERVICE_NAME: {{ .Values.env.OTEL_SERVICE_NAME | quote }}
+  {{- if .Values.env.OTEL_EXPORTER_OTLP_ENDPOINT }}
+  OTEL_EXPORTER_OTLP_ENDPOINT: {{ .Values.env.OTEL_EXPORTER_OTLP_ENDPOINT | quote }}
+  {{- end }}
+  {{- if .Values.env.FRONTEND_URL }}
+  FRONTEND_URL: {{ .Values.env.FRONTEND_URL | quote }}
+  {{- end }}

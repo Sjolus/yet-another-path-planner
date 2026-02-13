@@ -1,0 +1,78 @@
+# Staging overrides
+#
+# Usage:
+#   helm install yapp ./infrastructure/helm/yapp \
+#     -f ./infrastructure/helm/yapp/values-staging.yaml \
+#     --set secrets.databaseUrl="postgresql://..." \
+#     --set secrets.jwtSecret="$(cat /path/to/secret)" \
+#     -n yapp-staging --create-namespace
+
+global:
+  yapp:
+    imageTag: main
+    imagePullPolicy: Always
+
+frontend:
+  replicaCount: 2
+  env:
+    NEXT_PUBLIC_API_URL: "https://staging.yapp.example.com/api"
+    OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector.observability:4317"
+  hpa:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 4
+  pdb:
+    enabled: true
+
+backend:
+  replicaCount: 2
+  env:
+    NODE_ENV: production
+    FRONTEND_URL: "https://staging.yapp.example.com"
+    OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector.observability:4317"
+  hpa:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 6
+  pdb:
+    enabled: true
+
+api-gateway:
+  replicaCount: 2
+  env:
+    CORS_ORIGIN: "https://staging.yapp.example.com"
+  hpa:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 4
+  pdb:
+    enabled: true
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+  hosts:
+    - host: staging.yapp.example.com
+  tls:
+    - secretName: yapp-staging-tls
+      hosts:
+        - staging.yapp.example.com
+
+secrets:
+  # Override via --set or External Secrets Operator
+  databaseUrl: ""
+  redisUrl: ""
+  jwtSecret: ""
+  jwtRefreshSecret: ""
+
+postgresql:
+  enabled: true
+  primary:
+    persistence:
+      size: 10Gi
+
+redis:
+  enabled: true
+  architecture: standalone
