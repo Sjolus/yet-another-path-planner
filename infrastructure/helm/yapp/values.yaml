@@ -13,6 +13,9 @@ global:
     #   - name: ghcr-secret
     # Internal backend port (used by api-gateway to construct BACKEND_URL)
     backendPort: 3001
+    # Shared secret name used by all subcharts
+    # Default is based on .Release.Name for consistency across umbrella and subcharts
+    secretName: ""
 
 # -- Frontend (Next.js 15)
 frontend:
