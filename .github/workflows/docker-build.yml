@@ -64,7 +64,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: false
-        continue-on-error: false
         
       - name: Retry build and push on failure
         if: failure()
@@ -130,7 +129,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: false
-        continue-on-error: false
         
       - name: Retry build and push on failure
         if: failure()
@@ -196,7 +194,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: false
-        continue-on-error: false
         
       - name: Retry build and push on failure
         if: failure()
