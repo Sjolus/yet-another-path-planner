@@ -44,10 +44,12 @@ This document describes the proposed monorepo layout and the end-to-end platform
 
 ## Kubernetes Delivery
 
-- **Helm/Kustomize**: Each component ships with a chart that defines Deployments, Services, HPAs, PodDisruptionBudgets, resource requests/limits, and config maps. An umbrella chart wires shared values (domains, secrets, image tags).
-- **Networking**: Ingress via NGINX or Traefik, TLS managed by cert-manager, optional ExternalDNS. Service mesh (Linkerd/Istio) enforces mTLS and provides traffic policy if desired.
-- **Stateful Services**: PostgreSQL and Redis run as StatefulSets with PersistentVolumeClaims, backup/restore automation, and monitoring alerts. Optionally rely on external managed offerings if available.
-- **Secrets & Config**: Use External Secrets Operator or SealedSecrets. Cluster-wide ConfigMaps store shared environment defaults; sensitive config remains in secrets only.
+- **Helm Umbrella Chart**: The chart at `infrastructure/helm/yapp/` deploys all components. Each application service (frontend, backend, api-gateway) is a local subchart under `charts/`. Bitnami PostgreSQL 18.3.0 and Redis 25.2.0 are vendored as `file://` dependencies. The umbrella chart wires shared values under `global.yapp.*` (image registry, tag, pull policy, backend port).
+- **Environment Profiles**: `values-dev.yaml` (1 replica, no HPA), `values-staging.yaml` (2 replicas, HPA/PDB, TLS via cert-manager), and `values-prod.yaml` (3 replicas, external data stores, HPA/PDB). See `infrastructure/README.md` for full configuration reference.
+- **Networking**: Path-based Ingress routes `/api` to the api-gateway and `/` to the frontend. Traefik is the default controller with an auto-created `StripPrefix` middleware; NGINX annotation examples are included in values.yaml. Backend is cluster-internal only (not exposed via Ingress), matching the BFF pattern.
+- **Stateful Services**: In-cluster PostgreSQL and Redis are deployed via Bitnami subcharts with PersistentVolumeClaims. For production, set `postgresql.enabled: false` / `redis.enabled: false` and provide external connection URLs via `secrets.databaseUrl` / `secrets.redisUrl`.
+- **Secrets & Config**: Plain Kubernetes Secrets for database URLs, Redis URLs, and JWT secrets. Production deployments should use External Secrets Operator or SealedSecrets. Each service also has a ConfigMap for non-sensitive environment variables.
+- **Chart Publishing**: The Helm chart is published to GHCR as an OCI artifact via `.github/workflows/helm-publish.yml`. Install with: `helm install yapp oci://ghcr.io/sjolus/yet-another-path-planner/charts/yapp --version 0.1.0`.
 
 ## Observability & Ops
 

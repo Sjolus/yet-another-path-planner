@@ -1,0 +1,189 @@
+# -- Global values shared across all subcharts
+# Note: global.imageRegistry is reserved by Bitnami charts. We use global.yapp.*
+# to avoid overriding Bitnami's image registry settings.
+global:
+  yapp:
+    # Container registry where YAPP images are published
+    imageRegistry: ghcr.io/sjolus/yet-another-path-planner
+    # Image tag to deploy (override per environment)
+    imageTag: latest
+    imagePullPolicy: IfNotPresent
+    # Uncomment if GHCR requires authentication
+    # imagePullSecrets:
+    #   - name: ghcr-secret
+    # Internal backend port (used by api-gateway to construct BACKEND_URL)
+    backendPort: 3001
+    # Shared secret name used by all subcharts
+    # Default is based on .Release.Name for consistency across umbrella and subcharts
+    secretName: ""
+
+# -- Frontend (Next.js 15)
+frontend:
+  replicaCount: 2
+  image:
+    repository: ""
+    tag: ""
+    pullPolicy: ""
+  service:
+    type: ClusterIP
+    port: 3000
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi
+  env:
+    # Note: NEXT_PUBLIC_* vars are baked at build time for client-side code.
+    # ConfigMap values only affect server-side rendering.
+    NEXT_PUBLIC_API_URL: "/api"
+    NEXT_PUBLIC_WS_URL: ""
+    NEXT_PUBLIC_OTEL_SERVICE_NAME: yapp-frontend
+    OTEL_EXPORTER_OTLP_ENDPOINT: ""
+  hpa:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 70
+  pdb:
+    enabled: false
+    minAvailable: 1
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+
+# -- Backend (NestJS 10)
+backend:
+  replicaCount: 2
+  image:
+    repository: ""
+    tag: ""
+    pullPolicy: ""
+  service:
+    type: ClusterIP
+    port: 3001
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: "1"
+      memory: 512Mi
+  env:
+    NODE_ENV: production
+    PORT: "3001"
+    JWT_EXPIRATION: "1h"
+    JWT_REFRESH_EXPIRATION: "7d"
+    OTEL_SERVICE_NAME: yapp-backend
+    OTEL_EXPORTER_OTLP_ENDPOINT: ""
+    FRONTEND_URL: ""
+  hpa:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 8
+    targetCPUUtilizationPercentage: 70
+  pdb:
+    enabled: false
+    minAvailable: 1
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+
+# -- API Gateway (Express 4.x BFF)
+api-gateway:
+  replicaCount: 2
+  image:
+    repository: ""
+    tag: ""
+    pullPolicy: ""
+  service:
+    type: ClusterIP
+    port: 3002
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi
+  env:
+    PORT: "3002"
+    CORS_ORIGIN: ""
+  hpa:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 70
+  pdb:
+    enabled: false
+    minAvailable: 1
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+
+# -- Ingress (path-based routing)
+ingress:
+  enabled: true
+  # Default: traefik. Set to "nginx" for NGINX Ingress Controller.
+  className: traefik
+  annotations: {}
+    # For NGINX Ingress Controller, add:
+    #   nginx.ingress.kubernetes.io/use-regex: "true"
+    #   nginx.ingress.kubernetes.io/rewrite-target: /$2
+    # Traefik StripPrefix middleware annotation is auto-injected by the template.
+  hosts:
+    - host: yapp.local
+  tls: []
+  # - secretName: yapp-tls
+  #   hosts:
+  #     - yapp.example.com
+
+# -- Shared secrets
+# IMPORTANT: Override these in production. Never commit real secrets.
+# For production, use External Secrets Operator or SealedSecrets.
+secrets:
+  databaseUrl: "postgresql://user:password@yapp-postgresql:5432/yapp_dev"
+  redisUrl: "redis://yapp-redis-master:6379"
+  jwtSecret: "change-me-in-production"
+  jwtRefreshSecret: "change-me-in-production-refresh"
+
+# -- PostgreSQL (Bitnami subchart)
+# Disable and provide external DATABASE_URL for managed services (RDS, Cloud SQL).
+postgresql:
+  enabled: true
+  auth:
+    username: user
+    password: password
+    database: yapp_dev
+  primary:
+    persistence:
+      size: 5Gi
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+
+# -- Redis (Bitnami subchart)
+# Disable and provide external REDIS_URL for managed services (ElastiCache, Memorystore).
+redis:
+  enabled: true
+  architecture: standalone
+  auth:
+    enabled: false
+  master:
+    persistence:
+      size: 2Gi
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 250m
+        memory: 128Mi

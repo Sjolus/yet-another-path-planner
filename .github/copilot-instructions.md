@@ -26,6 +26,7 @@ During implementation:
 1. Keep modifications scoped; avoid touching unrelated files.
 2. Write concise, well-structured commits with imperative subject lines.
 3. Maintain telemetry instrumentation (OTel). If adding/removing services, update Grafana/LGTM configs.
+4. If adding or modifying services, update the Helm chart at `infrastructure/helm/yapp/` (subchart templates, values.yaml, environment overrides).
 
 After implementation:
 1. Update documentation sections impacted by the change.
@@ -37,6 +38,7 @@ After implementation:
 - Always update `docs/architecture.md` when you add or remove high-level components.
 - Adjust `docs/onboarding.md` for new prerequisites, environment variables, or workflows.
 - If telemetry, CI/CD, or operational procedures change, update `ops/` runbooks and reference them here.
+- When changing infrastructure or deployment, update `infrastructure/README.md` and the Helm chart values.
 - Maintain a single source of truth—avoid duplicating instructions across multiple files without cross-links.
 
 ## 4. Telemetry & LGTM Awareness

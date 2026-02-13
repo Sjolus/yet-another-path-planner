@@ -50,6 +50,7 @@ When updating documentation, follow these guidelines:
 - **Runbooks** (`ops/runbooks/`) - Operational procedures, troubleshooting guides
 - **Issue/PR Templates** (`.github/`) - Maintain consistency with copilot-instructions.md
 - **Docker README files** - Each component's Docker usage and build instructions
+- **Infrastructure docs** (`infrastructure/README.md`) - Helm chart usage, configuration reference, and deployment instructions. Update when changing chart structure, values, or dependencies.
 
 ## Never
 

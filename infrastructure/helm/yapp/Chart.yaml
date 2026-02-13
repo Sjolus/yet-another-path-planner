@@ -1,0 +1,32 @@
+apiVersion: v2
+name: yapp
+description: Yet Another Path Planner - Flight simulation tour planning platform
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+
+# All subcharts are vendored locally in charts/.
+# To update Bitnami charts:
+#   helm repo add bitnami https://charts.bitnami.com/bitnami
+#   rm -rf charts/postgresql charts/redis
+#   helm pull bitnami/postgresql --version <version> --untar --untardir charts/
+#   helm pull bitnami/redis --version <version> --untar --untardir charts/
+#   Then update the version fields below to match.
+dependencies:
+  - name: frontend
+    version: "0.1.0"
+    repository: "file://charts/frontend"
+  - name: backend
+    version: "0.1.0"
+    repository: "file://charts/backend"
+  - name: api-gateway
+    version: "0.1.0"
+    repository: "file://charts/api-gateway"
+  - name: postgresql
+    version: "18.3.0"
+    repository: "file://charts/postgresql"
+    condition: postgresql.enabled
+  - name: redis
+    version: "25.2.0"
+    repository: "file://charts/redis"
+    condition: redis.enabled

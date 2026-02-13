@@ -65,7 +65,15 @@ pre-commit install
    pnpm start:dev  # or uv run fastapi main.py if using Python
    ```
 4. **Workers / Schedulers**: Launch the worker process defined in `backend/apps/worker` to process queues.
-5. **Cluster Parity**: Use `kind` + `helm install -f infrastructure/helm/values.dev.yaml chart-name ./infrastructure/helm` for full-cluster smoke tests.
+5. **Cluster Parity**: Use `kind` or `minikube` with the Helm chart for full-cluster smoke tests:
+   ```bash
+   kind create cluster --name yapp
+   helm install yapp ./infrastructure/helm/yapp \
+     -f infrastructure/helm/yapp/values-dev.yaml \
+     -n yapp --create-namespace
+   kubectl get pods -n yapp
+   ```
+   See `infrastructure/README.md` for full Helm chart documentation.
 
 ## 5. Quality & Verification
 
@@ -111,12 +119,19 @@ docker pull ghcr.io/sjolus/yet-another-path-planner/frontend:latest
 docker pull ghcr.io/sjolus/yet-another-path-planner/api-gateway:latest
 ```
 
+**Helm Chart Publishing**: The Helm chart is also published to GHCR as an OCI artifact via `.github/workflows/helm-publish.yml`. To install the published chart:
+
+```bash
+helm install yapp oci://ghcr.io/sjolus/yet-another-path-planner/charts/yapp --version 0.1.0
+```
+
 ## 9. Helpful References
 
 - `docs/architecture.md` — full component plan.
 - `docs/adrs/` — rationale behind major decisions (add entries as the system evolves).
-- `infrastructure/helm/` — manifests for the cluster.
+- `infrastructure/helm/yapp/` — Helm umbrella chart for Kubernetes deployment.
+- `infrastructure/README.md` — Helm chart usage guide, configuration reference, and deployment instructions.
 - `ops/runbooks/` — operational guides (to be expanded alongside feature work).
-- `.github/workflows/` — CI/CD workflows for testing, linting, and Docker builds.
+- `.github/workflows/` — CI/CD workflows for testing, linting, Docker builds, and Helm chart publishing.
 
 Feel free to open a discussion or GitHub issue if any onboarding step is unclear or needs automation.

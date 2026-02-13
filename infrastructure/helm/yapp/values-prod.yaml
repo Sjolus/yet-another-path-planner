@@ -1,0 +1,110 @@
+# Production overrides
+#
+# Usage:
+#   helm install yapp ./infrastructure/helm/yapp \
+#     -f ./infrastructure/helm/yapp/values-prod.yaml \
+#     --set global.yapp.imageTag=v0.1.0 \
+#     --set secrets.databaseUrl="postgresql://prod-user:$DB_PASS@rds-host:5432/yapp" \
+#     --set secrets.redisUrl="redis://elasticache-host:6379" \
+#     --set secrets.jwtSecret="$JWT_SECRET" \
+#     --set secrets.jwtRefreshSecret="$JWT_REFRESH_SECRET" \
+#     -n yapp-prod --create-namespace
+#
+# IMPORTANT: Do NOT commit real secrets to this file.
+# Use --set flags, CI/CD secret injection, or External Secrets Operator.
+
+global:
+  yapp:
+    imageTag: "v0.1.0"
+    imagePullPolicy: IfNotPresent
+
+frontend:
+  replicaCount: 3
+  env:
+    NEXT_PUBLIC_API_URL: "https://yapp.example.com/api"
+    OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector.observability:4317"
+  hpa:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 60
+  pdb:
+    enabled: true
+    minAvailable: 2
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: "1"
+      memory: 512Mi
+
+backend:
+  replicaCount: 3
+  env:
+    NODE_ENV: production
+    FRONTEND_URL: "https://yapp.example.com"
+    OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector.observability:4317"
+  hpa:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 15
+    targetCPUUtilizationPercentage: 60
+  pdb:
+    enabled: true
+    minAvailable: 2
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: "2"
+      memory: 1Gi
+
+api-gateway:
+  replicaCount: 3
+  env:
+    CORS_ORIGIN: "https://yapp.example.com"
+  hpa:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 60
+  pdb:
+    enabled: true
+    minAvailable: 2
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: "1"
+      memory: 512Mi
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: yapp.example.com
+  tls:
+    - secretName: yapp-prod-tls
+      hosts:
+        - yapp.example.com
+
+secrets:
+  # IMPORTANT: Supply these via --set flags or External Secrets Operator.
+  # Never commit real credentials here.
+  databaseUrl: ""
+  redisUrl: ""
+  jwtSecret: ""
+  jwtRefreshSecret: ""
+
+# Use managed database services in production
+postgresql:
+  enabled: false
+
+# Use managed cache services in production
+redis:
+  enabled: false

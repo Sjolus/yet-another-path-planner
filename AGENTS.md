@@ -76,16 +76,27 @@ For more information on creating custom agents, see the [GitHub Copilot document
 **Purpose**: Expert in CI/CD, Docker, Kubernetes, and infrastructure.
 
 **Expertise**:
-- GitHub Actions workflows
+- GitHub Actions workflows (ci.yml, docker-build.yml, helm-publish.yml)
 - Docker multi-stage builds
-- Kubernetes manifests and Helm charts
-- Monitoring and observability setup
-- Infrastructure as Code
+- Helm umbrella chart at `infrastructure/helm/yapp/` with per-service subcharts
+- Bitnami vendored dependencies (PostgreSQL, Redis) managed via `file://` references
+- Environment-specific values files (values-dev.yaml, values-staging.yaml, values-prod.yaml)
+- Traefik/NGINX Ingress configuration and path-based routing
+- Monitoring and observability setup (OpenTelemetry, Grafana LGTM)
+
+**Key Files**:
+- `infrastructure/helm/yapp/Chart.yaml` — umbrella chart dependencies
+- `infrastructure/helm/yapp/values.yaml` — base configuration (uses `global.yapp.*` namespace)
+- `infrastructure/helm/yapp/charts/*/templates/` — per-service Kubernetes resources
+- `.github/workflows/helm-publish.yml` — chart publishing to GHCR
+- `infrastructure/README.md` — end-user deployment guide
 
 **Use Cases**:
+- "Add Helm subchart for a new service"
 - "Update Docker build workflow for new component"
-- "Create Helm chart for new service"
 - "Configure Grafana dashboard for API metrics"
+- "Modify Ingress routing for new API paths"
+- "Update Bitnami dependency versions"
 
 ### 6. Security Reviewer
 

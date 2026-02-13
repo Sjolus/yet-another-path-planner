@@ -1,0 +1,18 @@
+dependencies:
+- name: frontend
+  repository: file://charts/frontend
+  version: 0.1.0
+- name: backend
+  repository: file://charts/backend
+  version: 0.1.0
+- name: api-gateway
+  repository: file://charts/api-gateway
+  version: 0.1.0
+- name: postgresql
+  repository: file://charts/postgresql
+  version: 18.3.0
+- name: redis
+  repository: file://charts/redis
+  version: 25.2.0
+digest: sha256:24815ab24eef543a322ac85f3a0c2ffb1b99f5500027642bea86c4397778bdb6
+generated: "2026-02-13T03:11:29.259538009Z"

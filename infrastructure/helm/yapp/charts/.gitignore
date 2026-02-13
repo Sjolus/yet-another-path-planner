@@ -1,0 +1,3 @@
+# helm dependency build generates .tgz archives alongside the vendored directories.
+# These are redundant build artifacts and should not be committed.
+*.tgz

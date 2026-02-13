@@ -23,7 +23,7 @@ api-gateway/     # @yapp/api-gateway - Express BFF (port 3002)
 packages/        # Shared libraries (currently empty)
 tools/           # Dev utilities (currently empty)
 docs/            # Architecture and onboarding docs
-infrastructure/  # Kubernetes manifests / IaC (placeholder)
+infrastructure/  # Helm chart for Kubernetes deployment
 ops/             # CI/CD configs, runbooks, dashboards
 ```
 
@@ -76,6 +76,7 @@ docker compose up --build       # Full local stack (postgres, redis, frontend, b
 - Backend uses NestJS decorator-based modules/controllers/providers with constructor injection.
 - OpenTelemetry instrumentation is expected on all services. Update Grafana/LGTM configs when adding or removing services.
 - Docker images use multi-stage builds targeting `linux/amd64` and `linux/arm64`, published to GitHub Container Registry (GHCR).
+- Helm umbrella chart at `infrastructure/helm/yapp/` deploys all services. Subcharts for frontend, backend, and api-gateway live in `charts/`. Bitnami PostgreSQL and Redis are vendored as `file://` dependencies. See `infrastructure/README.md` for usage.
 
 ## Key Documentation
 
@@ -92,4 +93,5 @@ docker compose up --build       # Full local stack (postgres, redis, frontend, b
 GitHub Actions workflows in `.github/workflows/`:
 - **ci.yml** -- lint, test, build matrix on push/PR to main
 - **docker-build.yml** -- multi-arch Docker image builds, push to GHCR
+- **helm-publish.yml** -- lint, package, and publish Helm chart to GHCR (OCI)
 - **copilot-instructions-check.yml** -- validates copilot instructions file
