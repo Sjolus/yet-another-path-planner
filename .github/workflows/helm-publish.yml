@@ -1,0 +1,62 @@
+name: Publish Helm Chart
+
+on:
+  push:
+    branches: [main]
+    tags:
+      - 'v[0-9]+.*'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  CHART_PATH: infrastructure/helm/yapp
+  OCI_REPO: oci://ghcr.io/sjolus/yet-another-path-planner/charts
+
+jobs:
+  helm-publish:
+    name: Lint, Package & Publish Helm Chart
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+
+      - name: Build chart dependencies
+        run: helm dependency build ${{ env.CHART_PATH }}
+
+      - name: Lint chart
+        run: helm lint ${{ env.CHART_PATH }}
+
+      - name: Log in to GHCR
+        if: github.event_name != 'pull_request'
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | \
+            helm registry login ${{ env.REGISTRY }} \
+              --username ${{ github.actor }} \
+              --password-stdin
+
+      - name: Package chart
+        if: github.event_name != 'pull_request'
+        run: |
+          VERSION_FLAG=""
+          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+            # Strip leading 'v' from tag to get semver (v1.2.3 -> 1.2.3)
+            TAG_VERSION="${{ github.ref_name }}"
+            TAG_VERSION="${TAG_VERSION#v}"
+            VERSION_FLAG="--version ${TAG_VERSION}"
+          fi
+          helm package ${{ env.CHART_PATH }} \
+            -d /tmp/helm-packages \
+            ${VERSION_FLAG}
+
+      - name: Push chart to GHCR
+        if: github.event_name != 'pull_request'
+        run: |
+          helm push /tmp/helm-packages/yapp-*.tgz ${{ env.OCI_REPO }}
